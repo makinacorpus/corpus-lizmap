@@ -1,41 +1,58 @@
-saltstates makina tree
-===========================
+=====================================================================
+Exemple of a generic lizmap deployment with salt/makina-states
+=====================================================================
 
-Prerequisite
-----------------
-Install those packages::
+.. contents::
 
-    apt-get install -y build-essential m4 libtool pkg-config autoconf gettext bzip2 groff man-db automake libsigc++-2.0-dev tcl8.5
-    apt-get install git python-dev swig libssl-dev libzmq-dev
-
-
-Install mastersalt
-----------------------
-Be sure that the FQDN for the top master salt machine is 'mastersalt.makina-corpus.net' before runninig the base hightstate call
-
-Create the salt top & develop code::
-
-    mkdir /srv/
-    git clone git@gitorious.makina-corpus.net:makinacorpus/salt-admin-pillar.git /srv/pillar
-    git clone git@gitorious.makina-corpus.net:makinacorpus/salt-admin.git /srv/salt
-
-Run the install buildout::
-
-    cd /srv/salt
-    python bootstrap.py
-    bin/buildout
-
-Install the base salt states infastructure::
-
-    /srv/salt/makina-states/bin/salt-call state.highstate --local -ldebug
-
-Accept both on local and master salt daemons the minion key::
-
-    mastersalt-key -A
-    salt-key -A
-
-
-Install a new salt-managed box
+USE/Install With makina-states
 -------------------------------
-See the makina-states repository's Readme instruction
+- Iniatilise on the target platform the project if it is not already done::
 
+    salt mc_project.init_project name=<foo>
+
+- Keep under the hood both remotes (pillar & project).
+
+- Clone the project pillar remote inside your project top directory
+
+- Add/Relace your salt deployment code inside **.salt** inside your repository.
+
+- Add the project remote
+
+    - replace remotenickname with a sensible name (eg: prod)::
+    - replace the_project_remote_given_in_init with the real url
+
+    - Run the following commands::
+
+        git remote add <remotenickname>  <the_project_remote_given_in_init>
+        git fetch --all
+
+- Each time you need to deploy from your computer, run::
+
+    cd pillar
+    git push [--force] <remotenickname> <yourlocalbranch(eg: master,prod,whatever)>:master
+    cd ..
+    git push [--force] <remotenickname> <yourlocalbranch(eg: master,prod,whatever)>:master
+
+- Notes:
+
+    - The distant branch is always *master**
+    - If you force the push, the local working copy of the remote deployed site
+      will be resetted to the TIP changeset your are pushing.
+
+- If you want to install locally on the remote computer, or test it locally and
+  do not want to run the full deployement procedure, when you are on a shell
+  (connected via ssh on the remote computer or locally on your box), run::
+
+      salt mc_project.deploy only=install,fixperms
+
+- You can also run just specific step(s)::
+
+      salt mc_project.deploy only=install,fixperms only_steps=000_whatever
+      salt mc_project.deploy only=install,fixperms only_steps=000_whatever,001_else
+
+- If you want to commit in prod and then push back from the remote computer, remember
+  to push on the right branch, eg::
+
+    git remote add github https://github.com/orga/repo.git
+    git fetch --all
+    git push github master:prod
