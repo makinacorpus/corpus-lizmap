@@ -1,0 +1,12 @@
+.installed.cfg
+makina-states.*-deploy.log
+.buildout
+.mr.developer.cfg
+bin/
+buildout-salt.cfg
+develop-eggs/
+etc/
+src/
+var
+webapp/
+www/

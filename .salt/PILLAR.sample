@@ -1,0 +1,86 @@
+#
+# This file contains default values which are used
+# by the salt states deploying your project.
+# you may copy them to your relevant PILLAR file
+# before editing them.
+# If you need to add variables, this is where to begin.
+# Please keep defaults in there, but real passwords
+# must be putted inside pillar
+#
+# replace project_name in your pillar by
+# the current projectname
+# you can also merge parts of this file
+# with the relevant pillar
+makina-states.projectname:
+  data:
+    domain: "www.{name}.loc"
+    git: https://github.com/makinacorpus/lizmap-web-client.git
+    has_app: true
+    has_db: true
+    cron_periodicity: "*/10 * * * *"
+    password: "secret"
+    users:
+      lizmap_admin: {password: "{password}"}
+    db:
+      password: "{password}"
+      name: "{name}"
+      user: "{name}"
+    var: "{data_root}/var"
+    cache_dir: "{data_root}/cache"
+    template_dir: "{ftp_root}/template/qgis"
+    www_dir: "{data_root}/www"
+    cgi_dir: "{www_dir}/cgi-bin"
+    rftp_root: "/srv/ftp/lizmap"
+    ftp_root: "{rftp_root}/{name}"
+    qgis_sock: "{name}.qgis.sock"
+    fpm_sock: "{name}.fpm.sock"
+    php_path:
+      - "../cmd.php"
+      - "../application.init.php"
+      - "{project_root}/cache"
+      - "{project_root}/ftp"
+      - "{project_root}/webapp/lizmap/www"
+      - "{project_root}/webapp/lizmap"
+      - "{project_root}/webapp/lib"
+      - "{project_root}/webapp/"
+    apache_vhost:
+      vh_in_template_source: "salt://makina-projects/{name}/files/in_virtualhost.conf"
+      qgis_sock: "{qgis_sock}"
+      fpm_sock: "{fpm_sock}"
+      allowed_files: "update.php|index.php|install.php|xmlrpc.php|cron.php"
+    fpmpool:
+      socket_name: "{fpm_sock}"
+      open_basedir: "{php_path}"
+      include_path: "{php_path}"
+      session_auto_start: 0
+      allow_url_fopen: 1
+      upload_max_filesize: "100M"
+      max_input_vars: 3000
+      fpm_user: "{user}"
+      fpm_group: "{group}"
+    WMS:
+      Name: "WMS by makinacorpus"
+      Title: "QGIS mapserver (Makina Corpus)"
+      Abstract: "A WMS service with QGIS mapserver (makina corpus)"
+      Keywords: ["QGIS", "mapserver"]
+      ContactPerson: "Jean Pierre Oliva"
+      ContactOrganization: "Makia Corpus"
+      AddressType: "postal"
+      Address: "36, rue Jacques Babinet"
+      City: "Toulouse"
+      StateOrProvince: "SG"
+      PostCode: "31100"
+      Country: "France"
+      ContactVoiceTelephone: "+33 (0)9 53 73 22 74"
+      ContactElectronicMailAddress: "contact@makina-corpus.com"
+      fees: "none"
+      AccessConstraints: "none"
+      LayerLimit: 99
+  env_defaults:
+    dev:
+      fpmpool:
+        display_errors: True
+    prod:
+      apache_vhost:
+        log_level: error
+# vim:set ft=yaml:
