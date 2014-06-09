@@ -22,8 +22,8 @@
             if [ -e "{{cfg.project_root}}" ];then
             {{locs.resetperms}} -q\
               -u {{cfg.user}} -g {{cfg.group}}\
-              --path "{{cfg.data.ftproot}}/{{cfg.name}}"\
-              {% for usr in cfg.data.users %} --users {{usr}}:rwx{% endfor%}\
+              --path "{{cfg.data.ftp_root}}"\
+              {% for userdef in cfg.data.users%}{% for usr, udata in userdef.items() %} --users {{usr}}:rwx{% endfor%}{% endfor%}\
               --fmode 770 --dmode 770\
               --groups {{salt['mc_apache.settings']().httpd_user}}:rwx;
             "{{locs.resetperms}}" "${@}" -q\
@@ -35,7 +35,7 @@
               --groups {{cfg.group}} \
               --user {% if not cfg.no_user%}{{cfg.user}}{% else -%}root{% endif %} \
               --group {{cfg.group}};
-              chmod o+x "{{ftproot}}/{{cfg.name}}" "{{cfg.data.ftproot}}" "{{cfg.data.rftproot}}"
+              chmod o+x "{{cfg.data.ftp_root}}" "{{cfg.data.rftp_root}}"
             fi
   cmd.run:
     - name: {{cfg.project_dir}}/global-reset-perms.sh
@@ -46,7 +46,7 @@
 
 {{cfg.name}}-fixperms:
   file.managed:
-    - name: /etc/cron.d/{{cfg.name.replace('.', '_'}}-fixperms
+    - name: /etc/cron.d/{{cfg.name.replace('.', '_')}}-fixperms
     - user: root
     - mode: 744
     - contents: |

@@ -23,7 +23,8 @@ include:
       - file: {{cfg.name}}-bindmounted-ftp
 
 {# create each user, his home and base layout #}
-{% for user, data in cfg.data.users.items() %}
+{% for userdef in cfg.data.users %}
+{% for user, data in userdef.items() %}
 {{cfg.name}}-ftp-user-{{user}}:
   group.present:
     - name: {{user}}
@@ -49,6 +50,7 @@ include:
       - {{user}}
     - watch:
       - user: {{cfg.name}}-ftp-user-{{user}}
+{% endfor %}
 {% endfor %}
 {% else %}
 no-op: {mc_proxy.hook: []}

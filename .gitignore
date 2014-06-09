@@ -1,4 +1,6 @@
 .installed.cfg
+reset-perms.sh
+www
 makina-states.*-deploy.log
 .buildout
 .mr.developer.cfg

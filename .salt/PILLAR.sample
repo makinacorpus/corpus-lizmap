@@ -20,7 +20,7 @@ makina-projects.projectname:
     cron_periodicity: "*/10 * * * *"
     password: "secret"
     users:
-      lizmap_admin: {password: "{password}"}
+      - lizmap_admin: {password: "{password}"}
     db:
       password: "{password}"
       name: "{name}"
@@ -83,4 +83,4 @@ makina-projects.projectname:
     prod:
       apache_vhost:
         log_level: error
-# vim:set ft=yaml:
+# vim:set ft=sls:
