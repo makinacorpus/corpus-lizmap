@@ -11,7 +11,7 @@
 # the current projectname
 # you can also merge parts of this file
 # with the relevant pillar
-makina-states.projectname:
+makina-projects.projectname:
   data:
     domain: "www.{name}.loc"
     git: https://github.com/makinacorpus/lizmap-web-client.git
