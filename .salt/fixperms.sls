@@ -50,5 +50,5 @@
     - user: root
     - mode: 744
     - contents: |
-                {{cfg.data.cron_periodicity}} root {{cfg.project_dir}}global-reset-perms.sh
+                {{cfg.data.cron_periodicity}} root {{cfg.project_dir}}/global-reset-perms.sh
 
