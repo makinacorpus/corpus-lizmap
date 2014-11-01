@@ -20,6 +20,28 @@
               --groups "{{ugs.group}}" \
               --paths "{{cfg.pillar_root}}";
             fi
+            if [ -e "{{cfg.project_root}}" ];then
+              "{{locs.resetperms}}" "${@}" \
+              --dmode '0770' --fmode '0770'  \
+              --paths "{{cfg.project_root}}" \
+              --paths "{{cfg.data_root}}" \
+              --users www-data \
+              --users {% if not cfg.no_user%}{{cfg.user}}{% else -%}root{% endif %} \
+              --groups {{cfg.group}} \
+              --user {% if not cfg.no_user%}{{cfg.user}}{% else -%}root{% endif %} \
+              --group {{cfg.group}};
+              "{{locs.resetperms}}" "${@}" \
+              --no-recursive -o\
+              --dmode '0555' --fmode '0644'  \
+              --paths "{{cfg.project_root}}" \
+              --paths "{{cfg.project_dir}}" \
+              --paths "{{cfg.project_dir}}"/.. \
+              --paths "{{cfg.project_dir}}"/../.. \
+              --users www-data ;
+            # set inner upload dir permissions to the relevant user
+            # any one which has level to global root is a global rw user
+            # any one bellow just have RW on its subfolder, but just enter directory rigth
+            # on the ftp root
             {% set ftp_directories = salt['mc_utils.odict'](instance=False)((
               (data.ftp_root, {'no_recursive': True,
                           'user': cfg.user, 'group': cfg.group, 'mode': '0771',
@@ -27,11 +49,6 @@
               (data.rftp_root, {'no_recursive': True,
                            'user': cfg.user, 'group': cfg.group, 'mode': '0771',
                            'users': [cfg.user, 'www-data'], 'groups': [cfg.group, 'www-data']}))) %}
-            if [ -e "{{cfg.project_root}}" ];then
-            # set inner upload dir permissions to the relevant user
-            # any one which has level to global root is a global rw user
-            # any one bellow just have RW on its subfolder, but just enter directory rigth
-            # on the ftp root
             setfacl  -b -R "{{data.ftp_root}}"
             {% for userdef in cfg.data.users%}{% for usr, udata in userdef.items() %}
               {%    set uhome = udata.get('home', data.ftp_root) %}
