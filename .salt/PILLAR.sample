@@ -20,6 +20,7 @@ makina-projects.projectname:
     password: "secret"
     users:
       - lizmap_admin: {password: "{password}"}
+      - uploader: {password: "{password}", home: "{ftp_root}/uploader"}
     db:
       host: "127.0.0.1"
       port: "5432"

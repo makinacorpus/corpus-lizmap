@@ -15,6 +15,8 @@ include:
 {# create each user, his home and base layout #}
 {% for userdef in cfg.data.users %}
 {% for user, data in userdef.items() %}
+
+{% set uhome = data.get('home', cfg.data.ftp_root) %}
 {{cfg.name}}-ftp-user-{{user}}:
   group.present:
     - name: {{user}}
@@ -24,8 +26,8 @@ include:
     - password: {{salt['mc_utils.unix_crypt'](data.password)}}
     - group: {{user}}
     - fullname: {{user}} user
-    - optional_groups: [www-data]
-    - home: {{cfg.data.ftp_root}}
+    - optional_groups: []
+    - home: {{uhome}}
     - remove_groups: False
     - gid_from_name: True
     - watch:
