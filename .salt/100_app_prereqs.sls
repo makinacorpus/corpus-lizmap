@@ -15,6 +15,7 @@ prepreq-{{cfg.name}}:
       - libspatialite-dev
       - libsqlite3-mod-blobtoxy
       - libsqlite3-mod-impexp
+      - postgresql-client
 
 {{cfg.name}}-lizmapwebclient:
   mc_git.latest:
