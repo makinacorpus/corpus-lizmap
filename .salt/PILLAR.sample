@@ -37,7 +37,9 @@ makina-projects.projectname:
     qgis_sock: "{name}.qgis.sock"
     fpm_sock: "{name}.fpm.sock"
     apache_vhost:
-      vh_in_template_source: "salt://makina-projects/{name}/files/in_virtualhost.conf"
+      vh_content_source: "salt://makina-projects/{name}/files/in_virtualhost.conf"
+      vh_top_source: "salt://makina-projects/{name}/files/top.conf"
+      vhost_basename: "corpus-{name}"
       qgis_sock: "{qgis_sock}"
       fpm_sock: "{fpm_sock}"
       allowed_files: "update.php|index.php|install.php|xmlrpc.php|cron.php"
