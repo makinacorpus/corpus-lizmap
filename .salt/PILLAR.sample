@@ -45,6 +45,7 @@ makina-projects.projectname:
       allowed_files: "update.php|index.php|install.php|xmlrpc.php|cron.php"
     fpmpool:
       socket_name: "{fpm_sock}"
+      pool_name: "corpus-{name}"
       open_basedir:
         - "../cmd.php"
         - "{project_root}/cache"
