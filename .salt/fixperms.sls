@@ -43,7 +43,7 @@
             # any one bellow just have RW on its subfolder, but just enter directory rigth
             # on the ftp root
             {% set ftp_directories = salt['mc_utils.odict'](instance=False)((
-              (data.ftp_root, {'no_recursive': True,
+              (data.ftp_root, {'no_recursive': False,
                           'user': cfg.user, 'group': cfg.group, 'mode': '0771',
                           'users': [cfg.user, 'www-data'], 'groups': [cfg.group, 'www-data']}),
               (data.rftp_root, {'no_recursive': True,

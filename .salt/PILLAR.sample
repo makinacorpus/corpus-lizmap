@@ -13,6 +13,11 @@
 # with the relevant pillar
 makina-projects.projectname:
   data:
+    #ftp_domain: ''
+    pgsql_name: geau-pgsql
+    pgsql_ip: null
+    ftp_ip: '127.0.0.2'
+    ftp_port_range: '22001 22100'
     domain: "www.{name}.loc"
     git: https://github.com/makinacorpus/lizmap-web-client.git
     rev: master
@@ -21,12 +26,6 @@ makina-projects.projectname:
     users:
       - lizmap_admin: {password: "{password}"}
       - uploader: {password: "{password}", home: "{ftp_root}/uploader"}
-    db:
-      host: "127.0.0.1"
-      port: "5432"
-      password: "{password}"
-      name: "{name}"
-      user: "{name}"
     var: "{data_root}/var"
     cache_dir: "{data_root}/cache"
     template_dir: "{ftp_root}/template/qgis"

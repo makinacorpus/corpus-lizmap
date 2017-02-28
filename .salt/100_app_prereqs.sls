@@ -1,4 +1,5 @@
 {% set cfg = opts.ms_project %}
+{% set cfg = opts.ms_project %}
 {% set data = cfg.data %}
 {% set apacheSettings = salt['mc_apache.settings']() %}
 {% set sdata = salt['mc_utils.json_dump'](cfg) %}
@@ -66,3 +67,23 @@ var-dirs-{{cfg.name}}:
     - watch:
       - file: {{cfg.name}}-lizmapwebclient-docroot-fcgi
 {% endfor %}
+
+{{cfg.name}}-block-l:
+  file.accumulated:
+    - require_in:
+      - file: {{cfg.name}}-block-do
+    - filename: /etc/hosts
+    - text: |-
+            {% if data.pgsql_ip %}
+            {{data.pgsql_ip}} {{data.pgsql_name}}
+            {% endif %}
+
+{{cfg.name}}-block-do:
+  file.blockreplace:
+    - name: /etc/hosts
+    - marker_start: "#-- start {{cfg.name}} pgsql"
+    - marker_end: "#-- end {{cfg.name}} pgsql"
+    - content: ''
+    - append_if_not_found: True
+    - backup: '.bak'
+    - show_changes: True
