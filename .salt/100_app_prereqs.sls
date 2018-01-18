@@ -17,6 +17,8 @@ prepreq-{{cfg.name}}:
       - libsqlite3-mod-blobtoxy
       - libsqlite3-mod-impexp
       - postgresql-client
+      - redis-server
+      - php5.6-sqlite3
 
 {{cfg.name}}-lizmapwebclient:
   mc_git.latest:
