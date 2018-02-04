@@ -3,6 +3,7 @@
 {% set data = cfg.data %}
 {% set apacheSettings = salt['mc_apache.settings']() %}
 {% set sdata = salt['mc_utils.json_dump'](cfg) %}
+{% set php = salt['mc_php.settings']() %}
 include:
   - makina-states.services.gis.qgis
 
@@ -18,7 +19,7 @@ prepreq-{{cfg.name}}:
       - libsqlite3-mod-impexp
       - postgresql-client
       - redis-server
-      - php5.6-sqlite3
+      - php{{php.php_ver}}-sqlite3
 
 {{cfg.name}}-lizmapwebclient:
   mc_git.latest:
