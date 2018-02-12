@@ -52,21 +52,20 @@ var-dirs-{{cfg.name}}:
 {{cfg.name}}-lizmapwebclient-docroot-fcgi:
   file.copy:
     - source: /usr/lib/cgi-bin/qgis_mapserv.fcgi
-    - name: {{cfg.data.cgi_dir}}/qgis_mapserv.fcgi
+    - name: {{cfg.data.cgi_dir}}/qgis_mapserv.fcgi.wrapped
     - force: true
     - makedirs: true
     - watch:
       - file: var-dirs-{{cfg.name}}
 
-{% for file in ['admin.sld', 'wms_metadata.xml']  %}
+{% for file in ['admin.sld', 'wms_metadata.xml', 'qgis_mapserv.fcgi']  %}
 {{cfg.name}}-lizmapwebclient-docroot-fcgi-{{file}}:
   file.managed:
     - source: salt://makina-projects/{{cfg.name}}/files/{{file}}
     - name: {{cfg.data.cgi_dir}}/{{file}}
     - template: jinja
     - defaults:
-        data: |
-              {{sdata}}
+        cfg: {{cfg.name}}
     - watch:
       - file: {{cfg.name}}-lizmapwebclient-docroot-fcgi
 {% endfor %}

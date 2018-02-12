@@ -1,6 +1,4 @@
-<!-- MANAGED VIA SALT 
-{% set fdata = salt['mc_utils.json_load'](data) %}
--->
+<!-- MANAGED VIA SALT -->
 <StyledLayerDescriptor xmlns="http://www.opengis.net/sld">
 <UserLayer>
 <Name>wfslayer</Name>

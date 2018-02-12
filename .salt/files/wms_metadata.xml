@@ -1,8 +1,9 @@
 <!-- MANAGED VIA SALT -->
 <!-- Service Metadata -->
 <Service>
- {% set fdata = salt['mc_utils.json_load'](data) %}
- {% set data = fdata.data.WMS %}
+  {%- set cfg = salt['mc_project.get_configuration'](cfg) %}
+  {%- set data = cfg.data %}
+  {%- set data = data.WMS %}
   <Name>{{data.Name}}</Name>
 	<!-- Human-readable title for pick lists -->
   <Title>{{data.Title}}</Title>
